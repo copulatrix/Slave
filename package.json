@@ -1,0 +1,26 @@
+{
+    "name": "slave",
+    "version": "1.0.0",
+    "description": "",
+    "main": "Start.js",
+    "scripts": {
+        "start": "Start.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/copulatrix/Slave.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/copulatrix/Slave/issues"
+    },
+    "homepage": "https://github.com/copulatrix/Slave#readme",
+    "dependencies": {
+        "cron": "^1.8.2",
+        "express": "^4.17.1",
+        "request": "^2.88.2",
+        "whois": "^2.12.0"
+    }
+}
