@@ -9,6 +9,8 @@ var request = require('request');
 var CronJob = require('cron').CronJob;
 var whois = require('whois');
 
+var dev = fs.existsSync('./.dev');
+
 var WaitTimes = {
     'COM':      256,
     'NET':      256,
@@ -70,28 +72,30 @@ app.get('/run/off', function(req, res){
 });
  
 app.get('/update', function(req, res){
-    exec('git pull', {
-        cwd: __dirname
-    }, function(GITerror, GITstdout, GITstderr){
-        exec('npm install', {
+    if(!dev){
+        exec('git pull', {
             cwd: __dirname
-        }, function(NPMerror, NPMstdout, NPMstderr){
-            res.send({
-                git: {
-                    error: GITerror,
-                    stdout: GITstdout,
-                    stderr: GITstderr
-                },
-                npm: {
-                    error: NPMerror,
-                    stdout: NPMstdout,
-                    stderr: NPMstderr
-                }
-            });
+        }, function(GITerror, GITstdout, GITstderr){
+            exec('npm install', {
+                cwd: __dirname
+            }, function(NPMerror, NPMstdout, NPMstderr){
+                res.send({
+                    git: {
+                        error: GITerror,
+                        stdout: GITstdout,
+                        stderr: GITstderr
+                    },
+                    npm: {
+                        error: NPMerror,
+                        stdout: NPMstdout,
+                        stderr: NPMstderr
+                    }
+                });
 
-            process.exit(1);
+                process.exit(1);
+            });
         });
-    });
+    }
 });
  
 app.listen(3000);
@@ -112,7 +116,8 @@ function DomainStatus(Word, Variant, VAR, Callback){
 
     setTimeout(function(){
         whois.lookup(Domain, {
-            'follow': 0
+            'follow': 0,
+            'timeout': 0
         }, function(err, data){
             if(err){
                 console.log(err);
@@ -163,7 +168,7 @@ function Query(Variant, VAR){
     Q(0, Variant, VAR, function(){
         request({
             method: 'POST',
-            url: 'http://0.0.0.0:1996/slave/lists/com/finished',
+            url: `http://0.0.0.0:1996/slave/lists/${Variant}/finished`,
             headers: {
                 'SLAVE-SECRET': _Secret,
                 'SLAVE-HOSTNAME': _Hostname
