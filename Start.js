@@ -3,6 +3,7 @@ var _Secret = require('./Slave.json')[1];
 
 var exec = require('child_process').exec;
 
+var fs = require('fs');
 var express = require('express');
 var request = require('request');
 var CronJob = require('cron').CronJob;
@@ -39,6 +40,7 @@ var app = express();
 
 var Slave = {
     Run: true,
+    Version: fs.readFileSync(`${__dirname}/.git/refs/heads/master`).toString().substr(0, 7),
     List: {
         'COM':      {Have: false, ID: 0, Count: 0, Done: 0, Left: 0, Words: []},
         'NET':      {Have: false, ID: 0, Count: 0, Done: 0, Left: 0, Words: []},
