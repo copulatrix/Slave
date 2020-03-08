@@ -109,7 +109,7 @@ GetConfig(function(_Config){
             Ticker('org', 'ORG');
             Ticker('comau', 'COMAU');
             Ticker('netau', 'NETAU');
-            Ticker('org', 'ORGAU');
+            Ticker('orgau', 'ORGAU');
         }, null, true, 'Australia/Melbourne');
 
         new CronJob('*/5 * * * * *', function(){
