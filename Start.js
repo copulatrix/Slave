@@ -44,6 +44,7 @@ var Config = {};
 
 var Slave = {
     Run: true,
+    Hostname: _Hostname,
     Version: fs.readFileSync(`${__dirname}/.git/refs/heads/master`).toString().substr(0, 7),
     List: {
         'COM':      {Have: false, ID: 0, Count: 0, Done: 0, Left: 0, Words: []},
