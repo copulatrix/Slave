@@ -20,7 +20,7 @@ execSync('chmod +x /etc/rc.local').toString();
 }
 request({
     method: 'POST',
-    url: 'http://0.0.0.0:1996/slave/status?=ThisIsTheStatus',
+    url: 'https://domaining.fadebit.com/slave/status?=ThisIsTheStatus',
     headers: {
         'SLAVE-SECRET': _Secret,
         'SLAVE-HOSTNAME': _Hostname,

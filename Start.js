@@ -151,7 +151,7 @@ function Q(I, Variant, VAR, Callback){
             if(Available){
                 request({
                     method: 'POST',
-                    url: 'http://0.0.0.0:1996/slave/domains/add',
+                    url: 'https://domaining.fadebit.com/slave/domains/add',
                     headers: {
                         'SLAVE-SECRET': 'Secret15121996',
                         'SLAVE-HOSTNAME': 'TestSlave01'
@@ -178,7 +178,7 @@ function Query(Variant, VAR){
     Q(0, Variant, VAR, function(){
         request({
             method: 'POST',
-            url: `http://0.0.0.0:1996/slave/lists/${Variant}/finished`,
+            url: `https://domaining.fadebit.com/slave/lists/${Variant}/finished`,
             headers: {
                 'SLAVE-SECRET': _Secret,
                 'SLAVE-HOSTNAME': _Hostname
@@ -200,7 +200,7 @@ function Ticker(Variant, VAR){
             console.log(VAR, 'Looking for list');
             request({
                 method: 'GET',
-                url: `http://0.0.0.0:1996/slave/lists/${Variant}/get`,
+                url: `https://domaining.fadebit.com/slave/lists/${Variant}/get`,
                 headers: {
                     'SLAVE-SECRET': _Secret,
                     'SLAVE-HOSTNAME': _Hostname,
@@ -230,7 +230,7 @@ function SetStatus(Status, Callback){
     console.log(Status);
     request({
         method: 'POST',
-        url: 'http://0.0.0.0:1996/slave/status',
+        url: 'https://domaining.fadebit.com/slave/status',
         headers: {
             'SLAVE-SECRET': _Secret,
             'SLAVE-HOSTNAME': _Hostname,
@@ -247,7 +247,7 @@ function SetStatus(Status, Callback){
 function GetConfig(Callback){
     request({
         method: 'GET',
-        url: 'http://0.0.0.0:1996/slave/config',
+        url: 'https://domaining.fadebit.com/slave/config',
         headers: {
             'SLAVE-SECRET': _Secret,
             'SLAVE-HOSTNAME': _Hostname,
