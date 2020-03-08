@@ -13,7 +13,7 @@ if(!dev){
 fs.writeFileSync('/etc/rc.local', `#!/bin/sh -e
 
 echo '' > /Slave/Log1.log;
-forever /Slave/OnStart.js |& tee -a /Slave/Log1.log & 
+forever /Slave/Start.js |& tee -a /Slave/Log1.log & 
 
 exit 0`);
 execSync('chmod +x /etc/rc.local').toString();
