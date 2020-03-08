@@ -40,6 +40,8 @@ var Patterns = {
 
 var app = express();
 
+var Config = {};
+
 var Slave = {
     Run: true,
     Version: fs.readFileSync(`${__dirname}/.git/refs/heads/master`).toString().substr(0, 7),
@@ -58,17 +60,10 @@ app.get('/', function(req, res){
 });
  
 app.get('/info', function(req, res){
-    res.send(Slave);
-});
- 
-app.get('/run/on', function(req, res){
-    Slave.Run = true;
-    res.send(Slave.Run);
-});
- 
-app.get('/run/off', function(req, res){
-    Slave.Run = false;
-    res.send(Slave.Run);
+    res.send({
+        Config: Config,
+        Slave: Slave
+    });
 });
  
 app.get('/update', function(req, res){
@@ -76,9 +71,11 @@ app.get('/update', function(req, res){
         exec('git pull', {
             cwd: __dirname
         }, function(GITerror, GITstdout, GITstderr){
+            if(GITerror){console.log(GITerror);}
             exec('npm install', {
                 cwd: __dirname
             }, function(NPMerror, NPMstdout, NPMstderr){
+                if(NPMerror){console.log(NPMerror);}
                 res.send({
                     git: {
                         error: GITerror,
@@ -100,15 +97,27 @@ app.get('/update', function(req, res){
  
 app.listen(3000);
 
-SetStatus('Slave Started Up!', function(){
-    new CronJob('0 * * * * *', function(){
-        Ticker('com', 'COM');
-        Ticker('net', 'NET');
-        Ticker('org', 'ORG');
-        Ticker('comau', 'COMAU');
-        Ticker('netau', 'NETAU');
-        Ticker('org', 'ORGAU');
-    }, null, true, 'Australia/Melbourne');
+GetConfig(function(_Config){
+    Config = _Config;
+    Slave.Run = _Config.Run;
+
+    SetStatus('Slave Started Up!', function(){
+        new CronJob('0 * * * * *', function(){
+            Ticker('com', 'COM');
+            Ticker('net', 'NET');
+            Ticker('org', 'ORG');
+            Ticker('comau', 'COMAU');
+            Ticker('netau', 'NETAU');
+            Ticker('org', 'ORGAU');
+        }, null, true, 'Australia/Melbourne');
+
+        new CronJob('*/5 * * * * *', function(){
+            GetConfig(function(_Config){
+                Config = _Config;
+                Slave.Run = _Config.Run;
+            });
+        }, null, true, 'Australia/Melbourne');
+    });
 });
 
 function DomainStatus(Word, Variant, VAR, Callback){
@@ -151,6 +160,7 @@ function Q(I, Variant, VAR, Callback){
                         'Domain': `${Slave.List[VAR].Words[I]}.${Tlds[VAR]}`
                     }
                 }, function(error, response){
+                    if(error){console.log(error);}
                     Q(I+1, Variant, VAR, Callback);
                 });
             }else{
@@ -176,7 +186,8 @@ function Query(Variant, VAR){
             formData: {
                 'List': Slave.List[VAR].ID
             }
-        }, function (error, response){ 
+        }, function(error, response){ 
+            if(error){console.log(error);}
             Slave.List[VAR] = {Have: false, ID: 0, Count: 0, Done: 0, Left: 0, Words: []};
             console.log(VAR, 'Done');
         });
@@ -196,6 +207,7 @@ function Ticker(Variant, VAR){
                 },
                 json: true
             }, function(error, response){
+                if(error){console.log(error);}
                 var Data = response.body;
                 if(Data.Success == true){
                     Slave.List[VAR].Have = true;
@@ -231,4 +243,20 @@ function SetStatus(Status, Callback){
         Callback();
     });
 }
+
+function GetConfig(Callback){
+    request({
+        method: 'GET',
+        url: 'http://0.0.0.0:1996/slave/config',
+        headers: {
+            'SLAVE-SECRET': _Secret,
+            'SLAVE-HOSTNAME': _Hostname,
+        },
+        json: true
+    }, function(error, response){
+        if(error){console.log(error);}
+        Callback(response.body.Config);
+    });
+}
+
 
