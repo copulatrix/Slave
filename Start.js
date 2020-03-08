@@ -68,6 +68,7 @@ app.get('/info', function(req, res){
 });
  
 app.get('/update', function(req, res){
+    res.send('');
     if(!dev){
         exec('git pull', {
             cwd: __dirname
@@ -77,21 +78,26 @@ app.get('/update', function(req, res){
                 cwd: __dirname
             }, function(NPMerror, NPMstdout, NPMstderr){
                 if(NPMerror){console.log(NPMerror);}
-                res.send({
-                    git: {
-                        error: GITerror,
-                        stdout: GITstdout,
-                        stderr: GITstderr
-                    },
-                    npm: {
-                        error: NPMerror,
-                        stdout: NPMstdout,
-                        stderr: NPMstderr
-                    }
-                });
-
                 process.exit(1);
             });
+        });
+    }
+});
+ 
+app.get('/restart', function(req, res){
+    res.send('');
+    if(!dev){
+        process.exit(1);
+    }
+});
+ 
+app.get('/reboot', function(req, res){
+    res.send('');
+    if(!dev){
+        exec('reboot', {
+            cwd: __dirname
+        }, function(NPMerror, NPMstdout, NPMstderr){
+            
         });
     }
 });
