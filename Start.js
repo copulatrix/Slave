@@ -154,8 +154,8 @@ function Q(I, Variant, VAR, Callback){
                     method: 'POST',
                     url: 'https://domaining.fadebit.com/slave/domains/add',
                     headers: {
-                        'SLAVE-SECRET': 'Secret15121996',
-                        'SLAVE-HOSTNAME': 'TestSlave01'
+                        'SLAVE-SECRET': _Secret,
+                        'SLAVE-HOSTNAME': _Hostname
                     },
                     formData: {
                         'Domain': `${Slave.List[VAR].Words[I]}.${Tlds[VAR]}`
