@@ -15,9 +15,9 @@ var WaitTimes = {
     'COM':      256,
     'NET':      256,
     'ORG':      7125,
-    'COMAU':    8125,
-    'NETAU':    8125,
-    'ORGAU':    8125
+    'COMAU':    15000,
+    'NETAU':    16000,
+    'ORGAU':    17000
 };
 
 var Tlds = {
